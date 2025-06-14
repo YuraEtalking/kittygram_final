@@ -27,7 +27,7 @@ services:
       - static:/static
 
   gateway:
-    image: etalking/kittygram_nginx
+    image: etalking/kittygram_gateway
     env_file: .env
     ports:
       - 9000:80
