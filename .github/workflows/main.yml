@@ -168,15 +168,14 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅ *Деплой приложения ${{ github.repository }} успешно выполнен!*
+            ✅ Деплой приложения ${{ github.repository }} успешно выполнен.*
             
-            *Автор:* ${{ github.actor }}
-            *Коммит:* ${{ github.event.commits[0].message }}
-            *Ссылка:* https://github.com/${{ github.repository }}/commit/${{ github.sha }}
-            *Время:* ${{ github.event.head_commit.timestamp }}
+            Автор: ${{ github.actor }}
+            Коммит: ${{ github.event.commits[0].message }}
+            Ссылка: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            Время: ${{ github.event.head_commit.timestamp }}
             
-            *Приложение ${{ github.repository }} готово!*
-          format: markdown
+            Приложение ${{ github.repository }} готово!
 
   send_failure_message:
     runs-on: ubuntu-latest
