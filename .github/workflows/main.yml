@@ -196,4 +196,4 @@ jobs:
             Ссылка: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
             Время: ${{ github.event.head_commit.timestamp }}
             Логи: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          format: text
+          format: MarkdownV2
