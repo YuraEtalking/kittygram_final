@@ -61,7 +61,7 @@ jobs:
         with:
           context: ./backend/
           push: true
-          tags: etalking/kittygram_backend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_backend:latest
 
   frontend_tests:
     runs-on: ubuntu-latest
@@ -102,7 +102,7 @@ jobs:
         with:
           context: ./frontend/
           push: true
-          tags: etalking/kittygram_frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_frontend:latest
 
   build_gateway_and_push_to_docker_hub:
     name: Push gateway Docker image to DockerHub
@@ -122,7 +122,7 @@ jobs:
         with:
           context: ./nginx/
           push: true
-          tags: etalking/kittygram_gateway:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_gateway:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -155,16 +155,42 @@ jobs:
             sudo docker compose -f docker-compose.production.yml down
             sudo docker compose -f docker-compose.production.yml up -d
             sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
-            sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
-            sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
+            sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --no-input
 
   send_message:
     runs-on: ubuntu-latest
     needs: deploy
+    if: success()
     steps:
       - name: Send message
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Деплой успешно выполнен!
+          message: |
+            ✅**Деплой приложения ${{ github.repository }} успешно выполнен!**
+            **Автор:** ${{ github.actor }}
+            **Коммит:** ${{ github.event.commits[0].message }}
+            **Ссылка:** https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            **Время:** ${{ github.event.head_commit.timestamp }}
+            **Приложение ${{ github.repository }} готово!**
+          format: markdown
+
+  send_failure_message:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: failure()
+    steps:
+      - name: Send failure message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ❌**Деплой приложения ${{ github.repository }} завершился с ошибкой!**
+            **Автор:** ${{ github.actor }}
+            **Коммит:** ${{ github.event.commits[0].message }}
+            **Ссылка:** https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            **Время:** ${{ github.event.head_commit.timestamp }}
+            **Логи:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          format: markdown
