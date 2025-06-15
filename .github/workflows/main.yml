@@ -168,12 +168,14 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅**Деплой приложения ${{ github.repository }} успешно выполнен!**
-            **Автор:** ${{ github.actor }}
-            **Коммит:** ${{ github.event.commits[0].message }}
-            **Ссылка:** https://github.com/${{ github.repository }}/commit/${{ github.sha }}
-            **Время:** ${{ github.event.head_commit.timestamp }}
-            **Приложение ${{ github.repository }} готово!**
+            ✅ *Деплой приложения ${{ github.repository }} успешно выполнен!*
+            
+            *Автор:* ${{ github.actor }}
+            *Коммит:* ${{ github.event.commits[0].message }}
+            *Ссылка:* https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            *Время:* ${{ github.event.head_commit.timestamp }}
+            
+            *Приложение ${{ github.repository }} готово!*
           format: markdown
 
   send_failure_message:
@@ -187,10 +189,11 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ❌**Деплой приложения ${{ github.repository }} завершился с ошибкой!**
-            **Автор:** ${{ github.actor }}
-            **Коммит:** ${{ github.event.commits[0].message }}
-            **Ссылка:** https://github.com/${{ github.repository }}/commit/${{ github.sha }}
-            **Время:** ${{ github.event.head_commit.timestamp }}
-            **Логи:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            ❌ *Деплой приложения ${{ github.repository }} завершился с ошибкой!*
+            
+            *Автор:* ${{ github.actor }}
+            *Коммит:* ${{ github.event.commits[0].message }}
+            *Ссылка:* https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            *Время:* ${{ github.event.head_commit.timestamp }}
+            *Логи:* https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           format: markdown
