@@ -175,7 +175,7 @@ jobs:
             Ссылка: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
             Время: ${{ github.event.head_commit.timestamp }}
             
-            Приложение ${{ github.repository }} готово!
+            Приложение ${{ github.repository }} готово.
 
   send_failure_message:
     runs-on: ubuntu-latest
